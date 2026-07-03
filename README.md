@@ -1,19 +1,35 @@
-# 🌿 Photothèque animalière - Serveur Web Léger
+# 🌿 Photothèque animalière
 
-Une galerie photographique légère écrite en Python, sans framework, reposant uniquement sur ThreadingHTTPServer, SimpleHTTPRequestHandler et Pillow.
+Un serveur Web léger écrit en Python permettant de parcourir une photothèque organisée par catégories.
+
+Il repose uniquement sur :
+
+- ThreadingHTTPServer
+- SimpleHTTPRequestHandler
+- Pillow
+
+**Le développement et les tests ont été réalisés sous Debian 13 (Trixie)**.
+
+---
+
+## Pourquoi ce projet ?
+
+Ce projet est volontairement développé sans framework Web (Flask, Django, FastAPI...).
+L'objectif est de comprendre le fonctionnement d'un serveur HTTP en Python en utilisant uniquement les bibliothèques standards (http.server) et Pillow pour la génération des miniatures.
 
 ---
 
 ### 1. Principe de fonctionnement
 
-L’application fonctionne sur un modèle Client / Serveur classique.
+L’application fonctionne sur un modèle Client / Serveur classique. 
 
 | Acteur | Rôle |
 | --- | --- |
 | **Le serveur** | Lit les dossiers de photos sur le disque, génère les pages HTML à la volée et sert les images. |
 | **Le navigateur client** | Safari, Chrome, Firefox... Il affiche les pages HTML reçues et envoie une requête `GET` au serveur à chaque clic. |
 
-Aucun JavaScript lourd côté client. Chaque changement de page = 1 nouveau `GET`.
+Aucun JavaScript lourd côté client.   
+Chaque action de l'utilisateur (clic, navigation, retour...) provoque une nouvelle requête HTTP GET vers le serveur.
 
 ---
 
@@ -33,7 +49,8 @@ Il faut placer les photos dans des dossiers par catégorie :
 
 Dossiers ignorés dans mon arborescence : `miniatures`, `Vidéos animalières`.
 
-Les miniatures `240x240` sont générées une seule fois dans `/miniatures/nom_categorie/` pour accélérer l’affichage.
+Les miniatures `240x240` sont générées une seule fois dans `/miniatures/nom_categorie/` pour accélérer l’affichage.  
+Les photos originales ne sont jamais modifiées. Les miniatures sont enregistrées dans un dossier distinct qui constitue un cache permanent.
 
 ---
 
@@ -45,10 +62,10 @@ Le cœur est la méthode `do_GET` du serveur. Elle analyse l’URL demandée par
 1.  **Client Safari** : Vous tapez `http://IP_DU_SERVEUR:9000/`
 2.  **Requête** : Safari envoie `GET /`
 3.  **Serveur** : `do_GET` voit `self.path == "/"` -> Il appelle `afficher_categories()`
-4.  **Réponse** : Le serveur renvoie du HTML avec une grille de cartes. Chaque carte est un lien : `<a href="/categorie/cerfs_et_biches">`
+4.  **Réponse** : Le serveur renvoie du HTML avec une grille de tuiles. Chaque tuile est un lien : `<a href="/categorie/cerfs_et_biches">`
 
 #### **Étape 2 : Galerie d’une catégorie `/categorie/nom`**
-1.  **Client Safari** : Vous cliquez sur une carte "Cerfs et Biches"
+1.  **Client Safari** : Vous cliquez sur une tuile "Cerfs et Biches"
 2.  **Requête** : Safari fait automatiquement `GET /categorie/cerfs_et_biches`
 3.  **Serveur** : `do_GET` voit `self.path.startswith("/categorie/")` -> Il appelle `afficher_galerie_categorie()`
 4.  **Réponse** : Le serveur liste les fichiers `.jpg/.png`, crée les miniatures si besoin, et renvoie du HTML avec une grille d’images `<img src="/miniatures/...">`
@@ -57,9 +74,10 @@ Le cœur est la méthode `do_GET` du serveur. Elle analyse l’URL demandée par
 1.  **Client Safari** : vous cliquez sur une miniature
 2.  **Requête** : Safari fait `GET /voir/cerfs_et_biches/3`
 3.  **Serveur** : `do_GET` -> `afficher_photo_navigation()` 
-4.  **Réponse** : HTML plein écran avec l’image originale. 
-    Les flèches `←` `→` du clavier et les boutons génèrent un nouveau `GET` vers `/voir/categorie/index-1` ou `index+1`. 
-    `ESC` renvoie vers `/categorie/nom`.
+4. **Réponse** : `afficher_photo_navigation()` génère dynamiquement une page HTML affichant la photo originale adaptée à la taille de la fenêtre.  
+   Un clic sur cette photo ouvre le fichier original en pleine résolution dans un nouvel onglet du navigateur.  
+   Les flèches `←` et `→` du clavier permettent de parcourir les photos de la catégorie en générant un nouveau `GET` vers `/voir/categorie/index-1` ou `/voir/categorie/index+1`.  
+   La touche `ESC` ramène à la galerie de la catégorie.
 
 #### **Bonus UX : Retour à la position du scroll**
 La page galerie utilise `sessionStorage` côté client. 
@@ -74,7 +92,8 @@ Au retour sur la galerie : le JS remet le scroll à la bonne position. Pas de re
 - **Compteur de photos** : Le nombre de fichiers par dossier est affiché sur la carte.
 - **Miniatures à la demande** : Génération auto via `Pillow` si la miniature n’existe pas.
 - **Navigation clavier** : `←` Précédent, `→` Suivant, `ESC` Retour galerie.
-- **Ouverture original** : Bouton `🔍 Original` pour voir le fichier en pleine résolution dans un nouvel onglet.
+- **Ouverture original** : Bouton `🔍 Original` pour voir le fichier en pleine résolution dans un nouvel onglet.  
+  Egalement un clic sur la photo ouvre le fichier original en pleine résolution dans un nouvel onglet, sans perte de qualité.
 - **Serveur multi-thread** : `ThreadingHTTPServer` pour gérer plusieurs clients en même temps.
 
 ---
@@ -157,20 +176,21 @@ Ainsi, aucune photo n'est déformée.
 
 Le projet repose sur une idée simple : **chaque composant a une responsabilité unique**.
 
-```
-          Navigateur Web
-                 │
-                 ▼
-             do_GET()
-                 │
-        ┌────────┼────────┐
-        ▼        ▼        ▼
-Catégories   Galerie   Visionneuse
-        │        │        │
-        └────────┼────────┘
-                 ▼
-      Photos et miniatures
-           sur le disque
+```              Navigateur Web
+                       │
+                  Requête GET
+                       │
+                       ▼
+                  do_GET()
+                       │
+        ┌──────────────┼──────────────┐
+        ▼              ▼              ▼
+Catégories       Galerie        Visionneuse
+        │              │              │
+        └──────────────┼──────────────┘
+                       ▼
+             Système de fichiers
+             Photos + Miniatures
 ```
 Cette séparation rend le code facile à comprendre, à maintenir et à faire évoluer.
 
@@ -187,5 +207,4 @@ python3 serveur_galerie.py
 ### Remerciements
 
 Ce projet a été conçu et développé par Philippe86220.
-Les réflexions sur l'architecture, les explications techniques, la relecture du code ainsi qu'une partie de la conception ont été réalisées avec l'aide de ChatGPT (OpenAI).
-Les choix d'implémentation et le code final restent sous la responsabilité de l'auteur.
+Les échanges techniques, les explications sur le fonctionnement du serveur, les réflexions sur l'architecture ainsi que la relecture du code ont été réalisés avec l'aide de ChatGPT (OpenAI).
