@@ -176,7 +176,7 @@ Cette séparation rend le code facile à comprendre, à maintenir et à faire é
 
 --- 
 
-### 6. Lancement
+### 7. Lancement
 
 ```bash
 pip install Pillow
