@@ -178,10 +178,10 @@ Cette séparation rend le code facile à comprendre, à maintenir et à faire é
 
 ### 7. Lancement
 
-```bash
+```
 pip install Pillow
 python3 serveur_galerie.py
-
+```
 ---
 
 ### Remerciements
