@@ -176,7 +176,8 @@ Ainsi, aucune photo n'est déformée.
 
 Le projet repose sur une idée simple : **chaque composant a une responsabilité unique**.
 
-```                              Navigateur Web
+```
+               Navigateur Web
                        │
                   Requête GET
                        │
