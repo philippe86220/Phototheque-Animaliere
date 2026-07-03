@@ -168,7 +168,7 @@ Ainsi, aucune photo n'est déformée.
 - Le dossier `miniatures` constitue un **cache**.
 - Le serveur ne recalcule jamais une miniature déjà présente.
 - Il se contente de la relire directement sur le disque.
-- Le temps de calcul n'est donc payé qu'une seule fois, lors du premier affichage de la photo.
+- La création d'une miniature n'a donc lieu qu'une seule fois, lors du premier affichage de la photo.
 
 ---
 
