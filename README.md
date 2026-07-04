@@ -129,7 +129,7 @@ Cette séparation permet de bénéficier des fonctionnalités de la bibliothèqu
 ### 5. Fonctionnalités
 
 - **Catégories avec icônes** : Dictionnaire `ICONES` pour afficher 🦌 🦅 🦊 etc.
-- **Compteur de photos** : Le nombre de fichiers par dossier est affiché sur la carte.
+- **Compteur de photos** : Le nombre de photos de chaque catégorie est affiché sur chaque tuile.
 - **Miniatures à la demande** : Génération auto via `Pillow` si la miniature n’existe pas.
 - **Navigation clavier** : `←` Précédent, `→` Suivant, `ESC` Retour galerie.
 - **Ouverture original** : Bouton `🔍 Original` pour voir le fichier en pleine résolution dans un nouvel onglet.  
