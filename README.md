@@ -225,13 +225,13 @@ Ainsi, aucune photo n'est déformée.
         ▼                       ▼
  HTML dynamique        Envoi des fichiers
 ```
-
+```
 Mes méthodes :
 
 • afficher_categories()
 • afficher_galerie_categorie()
 • afficher_photo_navigation()
-
+```
 --- 
 
 ### 8. Lancement
