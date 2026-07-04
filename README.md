@@ -113,8 +113,6 @@ Par exemple :
 | ---------------------------------------- | ---------------------------- |
 | `/cerfs_et_biches/photo1.jpg`            | Envoi de la photo originale  |
 | `/miniatures/cerfs_et_biches/photo1.jpg` | Envoi de la miniature        |
-| `/document.pdf`                          | Envoi du document PDF        |
-| `/archive.zip`                           | Envoi de l'archive           |
 | fichier inexistant                       | Réponse HTTP `404 Not Found` |
 ```
 Le projet repose donc sur une répartition simple des responsabilités :  
