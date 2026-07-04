@@ -214,26 +214,23 @@ Ainsi, aucune photo n'est déformée.
 
 ### 7. Architecture générale
 
-Le projet repose sur une idée simple : **chaque composant a une responsabilité unique**.
+```
+                 do_GET()
+                    │
+        ┌───────────┴───────────┐
+        │                       │
+        ▼                       ▼
+ Mes méthodes           SimpleHTTPRequestHandler
+        │                       │
+        ▼                       ▼
+ HTML dynamique        Envoi des fichiers
+```
 
-```
-                Navigateur Web
-                       │
-                  Requête GET
-                       │
-                       ▼
-                  do_GET()
-                       │
-        ┌──────────────┼──────────────┐
-        ▼              ▼              ▼
-Catégories       Galerie        Visionneuse
-        │              │              │
-        └──────────────┼──────────────┘
-                       ▼
-             Système de fichiers
-             Photos + Miniatures
-```
-Cette séparation rend le code facile à comprendre, à maintenir et à faire évoluer.
+Mes méthodes :
+
+• afficher_categories()
+• afficher_galerie_categorie()
+• afficher_photo_navigation()
 
 --- 
 
