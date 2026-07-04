@@ -236,11 +236,11 @@ Mes méthodes :
 
 ### 8. Lancement
 
-- Installation (Debian 13) de Pillow
+- Installation (Debian 13) de Pillow :
 ```
 sudo apt install python3-pil
 ```
-- Lancement
+- Lancement :
 ```
 python3 serveur_galerie.py
 ```
