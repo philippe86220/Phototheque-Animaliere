@@ -86,7 +86,47 @@ Au retour sur la galerie : le JS remet le scroll à la bonne position. Pas de re
 
 ---
 
-### 4. Fonctionnalités
+### 4. Le rôle de `SimpleHTTPRequestHandler`
+
+Le serveur hérite de la classe `SimpleHTTPRequestHandler` :
+
+```
+class GaleriePhotosHandler(SimpleHTTPRequestHandler):
+```
+
+La méthode `do_GET()` intercepte uniquement les URL spécifiques à l'application :
+- `/` → `afficher_categories()`
+- `/categorie/...` → `afficher_galerie_categorie()`
+- `/voir/... `→ `afficher_photo_navigation()`
+  
+Toutes les autres requêtes sont transmises à la classe parente :
+
+```
+super().do_GET()
+```
+C'est cette méthode qui se charge automatiquement de servir les fichiers présents dans le répertoire partagé.  
+
+Par exemple :
+
+```
+| Requête                                  | Traitement                   |
+| ---------------------------------------- | ---------------------------- |
+| `/cerfs_et_biches/photo1.jpg`            | Envoi de la photo originale  |
+| `/miniatures/cerfs_et_biches/photo1.jpg` | Envoi de la miniature        |
+| `/document.pdf`                          | Envoi du document PDF        |
+| `/archive.zip`                           | Envoi de l'archive           |
+| fichier inexistant                       | Réponse HTTP `404 Not Found` |
+```
+Le projet repose donc sur une répartition simple des responsabilités :  
+
+- les pages HTML dynamiques (catégories, galeries, visionneuse) sont générées par la classe
+  `GaleriePhotosHandler` ;
+- le transfert des fichiers (images, miniatures, PDF, vidéos, etc.) est assuré automatiquement par
+  `SimpleHTTPRequestHandler`.
+  
+Cette séparation permet de bénéficier des fonctionnalités de la bibliothèque standard Python sans avoir à réécrire un serveur de fichiers complet.
+
+### 5. Fonctionnalités
 
 - **Catégories avec icônes** : Dictionnaire `ICONES` pour afficher 🦌 🦅 🦊 etc.
 - **Compteur de photos** : Le nombre de fichiers par dossier est affiché sur la carte.
@@ -98,7 +138,7 @@ Au retour sur la galerie : le JS remet le scroll à la bonne position. Pas de re
 
 ---
 
-### 5. Création des miniatures
+### 6. Création des miniatures
 
 L'affichage direct de plusieurs centaines ou milliers de photos haute résolution serait très lent.  
 Le serveur utilise donc un mécanisme de cache.  
@@ -172,7 +212,7 @@ Ainsi, aucune photo n'est déformée.
 
 ---
 
-### 6. Architecture générale
+### 7. Architecture générale
 
 Le projet repose sur une idée simple : **chaque composant a une responsabilité unique**.
 
@@ -197,7 +237,7 @@ Cette séparation rend le code facile à comprendre, à maintenir et à faire é
 
 --- 
 
-### 7. Lancement
+### 8. Lancement
 
 ```
 pip install Pillow
