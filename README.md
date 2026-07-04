@@ -119,7 +119,7 @@ Le projet repose donc sur une répartition simple des responsabilités :
 
 - les pages HTML dynamiques (catégories, galeries, visionneuse) sont générées par la classe
   `GaleriePhotosHandler` ;
-- le transfert des fichiers (images, miniatures, PDF, vidéos, etc.) est assuré automatiquement par
+- le transfert des fichiers (images, miniatures etc.) est assuré automatiquement par
   `SimpleHTTPRequestHandler`.
   
 Cette séparation permet de bénéficier des fonctionnalités de la bibliothèque standard Python sans avoir à réécrire un serveur de fichiers complet.
