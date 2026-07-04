@@ -236,10 +236,17 @@ Mes méthodes :
 
 ### 8. Lancement
 
+- Installation (Debian 13) de Pillow
 ```
-pip install Pillow
+sudo apt install python3-pil
+```
+- Lancement
+```
 python3 serveur_galerie.py
 ```
+
+> Pour d'autres systèmes d'exploitation ou dans un environnement virtuel Python, Pillow peut également être installé avec `pip install Pillow`.
+
 ---
 
 ### Remerciements
