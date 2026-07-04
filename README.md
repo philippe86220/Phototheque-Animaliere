@@ -126,6 +126,8 @@ Le projet repose donc sur une répartition simple des responsabilités :
   
 Cette séparation permet de bénéficier des fonctionnalités de la bibliothèque standard Python sans avoir à réécrire un serveur de fichiers complet.
 
+---
+
 ### 5. Fonctionnalités
 
 - **Catégories avec icônes** : Dictionnaire `ICONES` pour afficher 🦌 🦅 🦊 etc.
