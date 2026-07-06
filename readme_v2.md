@@ -138,7 +138,7 @@ C'est la partie la plus importante : elle définit **comment le serveur répond 
 class GaleriePhotosHandler(SimpleHTTPRequestHandler):
 ```
 
-En héritant de `SimpleHTTPRequestHandler`, la classe récupère tout le comportement "serveur de fichiers statiques" (utile pour servir directement les images originales et les miniatures), et on peux **surcharger** (redéfinir) la méthode `do_GET` pour ajouter son propre routage.
+En héritant de `SimpleHTTPRequestHandler`, la classe récupère tout le comportement "serveur de fichiers statiques" (utile pour servir directement les images originales et les miniatures), et on peut **surcharger** (redéfinir) la méthode `do_GET` pour ajouter son propre routage.
 
 ### 7.1 `do_GET` : le routeur
 
@@ -348,7 +348,7 @@ serveur.serve_forever()
   - `"0.0.0.0"` signifie "écouter sur toutes les interfaces réseau", pas seulement `localhost` — c'est ce qui permet d'accéder au serveur depuis un autre appareil du réseau local (téléphone, autre PC) via l'adresse IP de la machine.
   - `PORT` : le port 9000 défini plus haut.
   - `GaleriePhotosHandler` : la classe qui traitera chaque requête (celle qu'on a détaillée ci-dessus).
-- `serveur.serve_forever()` : lance une **boucle infinie** qui écoute et traite les connexions entrantes, jusqu'à ce qu'on arrêtes le programme (`Ctrl+C`).
+- `serveur.serve_forever()` : lance une **boucle infinie** qui écoute et traite les connexions entrantes, jusqu'à ce qu'on arrête le programme (`Ctrl+C`).
 
 ---
 
