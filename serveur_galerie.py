@@ -1,6 +1,7 @@
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
 import os
 from PIL import Image
+from urllib.parse import unquote, quote
 
 DOSSIER_PHOTOS = "/home/philippe86220/Images/Photos"
 PORT = 9000
@@ -211,6 +212,7 @@ footer {{
 
     def afficher_galerie_categorie(self):
         categorie = self.path.split("/categorie/")[1]
+        categorie = unquote(categorie)
         categorie = os.path.basename(categorie)
 
         dossier = os.path.join(DOSSIER_PHOTOS, categorie)
@@ -227,9 +229,12 @@ footer {{
         for i, f in enumerate(fichiers):
             creer_miniature(categorie, f)
 
+            categorie_url = quote(categorie)
+            fichier_url = quote(f)
+
             blocs += f"""
-            <a href="/voir/{categorie}/{i}" onclick="sauver_position_scroll()">
-                <img src="/miniatures/{categorie}/{f}" loading="lazy" alt="{f}">
+            <a href="/voir/{categorie_url}/{i}" onclick="sauver_position_scroll()">
+                <img src="/miniatures/{categorie_url}/{fichier_url}" loading="lazy" alt="{f}">
             </a>
             """
 
@@ -332,8 +337,9 @@ window.addEventListener("load", function() {{
         if len(morceaux) != 4:
             self.send_error(404)
             return
-
-        categorie = os.path.basename(morceaux[2])
+        
+        categorie = unquote(morceaux[2])
+        categorie = os.path.basename(categorie)
 
         try:
             index = int(morceaux[3])
@@ -359,6 +365,7 @@ window.addEventListener("load", function() {{
         suivant = min(len(fichiers) - 1, index + 1)
 
         url_original = f"/{categorie}/{fichier}"
+        #url_categorie = quote(categorie)
         url_categorie = f"/categorie/{categorie}"
 
         html = f"""<!DOCTYPE html>
@@ -479,4 +486,3 @@ print(f"Adresse locale : http://localhost:{PORT}")
 print(f"Depuis un autre appareil : http://IP_DU_NUC:{PORT}")
 
 serveur.serve_forever()
-
